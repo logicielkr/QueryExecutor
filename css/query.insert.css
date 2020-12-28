@@ -1,0 +1,83 @@
+table#query th {
+	width:120px;
+}
+table#query td.contents textarea {
+	height: 250px;
+}
+table#query td.results textarea
+{
+	height: 50px;
+	background-color:#F3F3F3;
+}
+
+table#query th.encrypted,
+table#query td.encrypted,
+table#query th.autosave,
+table#query td.autosave,
+form.delete button
+{
+	display:none;
+}
+
+table#query th.encrypted.show,
+table#query td.encrypted.show,
+table#query th.autosave.show,
+table#query td.autosave.show
+{
+	display:table-cell;
+}
+td.execute {
+	width:60px;
+}
+
+@media only screen and (max-width: 600px) {
+	table#query th.title
+	{
+		display:none;
+	}
+	table#query td.title {
+		width:100%;
+		background-color:#f3f3f3;
+	}
+	table#query td,
+	table#query th
+	{
+		display:block;
+	}
+	table#query th.marked,
+	table#query th.history,
+	table#query th.encrypted.show,
+	table#query th.autosave.show
+	{
+		width:130px;
+		display:block;
+		float:left;
+		clear:both;
+	}
+	table#query td.marked,
+	table#query td.history,
+	table#query td.encrypted.show,
+	table#query td.autosave.show
+	{
+		display:block;
+	}
+	table#query td.encrypted.show,
+	table#query td.autosave.show
+	{
+		display:block;
+	}
+}
+
+table.results {
+	margin-top:10px;
+	border-collapse:collapse;
+}
+table.results th {
+	background-color:#84898C;
+	padding:5px;
+	border:#000000 1px solid;
+}
+table.results td {
+	padding:3px;
+	border:#000000 1px solid;
+}
