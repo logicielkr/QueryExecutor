@@ -223,6 +223,7 @@ function autoSave(target) {
 				obj.params && 
 				obj.params.query_history_id == target.parent().find("td.query_history_id").text()
 			) {
+				target.parent().next().next().remove();
 				target.parent().next().remove();
 				target.parent().remove();
 			}
