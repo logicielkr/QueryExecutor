@@ -49,13 +49,13 @@ function loadMemoHistoryById() {
 		contentType: false,
 		type: 'GET',
 		success: function(result){
-			var obj = parse_xml_document(result);
-			if(obj && obj.rows && obj.rows.length > 0 && obj.rows[0].query_history_id) {
+			var obj = parse_graha_xml_document(result);
+			if(obj && obj.rows && obj.rows["query_history"] && obj.rows["query_history"].length > 0 && obj.rows["query_history"][0].query_history_id) {
 				PwdArea.hide();
 				MessageArea.confirm(
 					"자동저장된 게시물을 확인하시겠습니까?", 
 					function() {
-						queryHistoryId = obj.rows[0].query_history_id;
+						queryHistoryId = obj.rows["query_history"][0].query_history_id;
 						loadMemoHistory();
 						return;
 					},
@@ -88,37 +88,37 @@ function loadMemoHistory() {
 		contentType: false,
 		type: 'GET',
 		success: function(result) {
-			var obj = parse_xml_document(result);
-			if(obj && obj.rows && obj.rows.length > 0) {
-				if(obj.rows[0].query_history_id) {
-					$("form#insert input.query_history_id").val(obj.rows[0].query_history_id);
-					$("form.delete input.query_history_id").val(obj.rows[0].query_history_id);
+			var obj = parse_graha_xml_document(result);
+			if(obj && obj.rows && obj.rows["query_history"] && obj.rows["query_history"].length > 0) {
+				if(obj.rows["query_history"][0].query_history_id) {
+					$("form#insert input.query_history_id").val(obj.rows["query_history"][0].query_history_id);
+					$("form.delete input.query_history_id").val(obj.rows["query_history"][0].query_history_id);
 					$("form.delete button[type='submit']").show();
 				}
-				if(obj.rows[0].query_id) {
-					$("form#insert input.query_id").val(obj.rows[0].query_id);
+				if(obj.rows["query_history"][0].query_id) {
+					$("form#insert input.query_id").val(obj.rows["query_history"][0].query_id);
 				}
-				if(obj.rows[0].parent_id) {
-					$("form#insert input.parent_id").val(obj.rows[0].parent_id);
+				if(obj.rows["query_history"][0].parent_id) {
+					$("form#insert input.parent_id").val(obj.rows["query_history"][0].parent_id);
 				}
-				if(obj.rows[0].title) {
-					$("form#insert input.title").val(obj.rows[0].title);
+				if(obj.rows["query_history"][0].title) {
+					$("form#insert input.title").val(obj.rows["query_history"][0].title);
 				}
-				if(obj.rows[0].contents) {
-					$("form#insert textarea.contents").val(obj.rows[0].contents);
+				if(obj.rows["query_history"][0].contents) {
+					$("form#insert textarea.contents").val(obj.rows["query_history"][0].contents);
 				}
-				if(obj.rows[0].results) {
-					$("form#insert textarea.results").val(obj.rows[0].results);
+				if(obj.rows["query_history"][0].results) {
+					$("form#insert textarea.results").val(obj.rows["query_history"][0].results);
 				}
-				if(obj.rows[0].marked) {
-					if(obj.rows[0].marked == "t") {
+				if(obj.rows["query_history"][0].marked) {
+					if(obj.rows["query_history"][0].marked == "t") {
 						$("form#insert input.marked").prop("checked", true);
 					} else {
 						$("form#insert input.marked").prop("checked", false);
 					}
 				}
-				if(obj.rows[0].encrypted) {
-					if(obj.rows[0].encrypted == "t") {
+				if(obj.rows["query_history"][0].encrypted) {
+					if(obj.rows["query_history"][0].encrypted == "t") {
 						$("form#insert input.encrypted").prop("checked", true);
 						isEncrypted = true;
 					} else {
@@ -311,10 +311,10 @@ function autoSave(gbn, callback) {
 			enctype: 'multipart/form-data',
 			data: formData,
 			success: function(result) {
-				var obj = parse_xml_document(result);
+				var obj = parse_graha_xml_document(result);
 				if(gbn) {
-					if(obj && obj.rows && obj.rows.length > 0 && obj.rows[0].query_history_id) {
-						$("form#insert input.query_history_id").val(obj.rows[0].query_history_id);
+					if(obj && obj.rows && obj.rows["query_history"] && obj.rows["query_history"].length > 0 && obj.rows["query_history"][0].query_history_id) {
+						$("form#insert input.query_history_id").val(obj.rows["query_history"][0].query_history_id);
 					}
 				} else if(
 					obj && 

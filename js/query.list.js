@@ -6,12 +6,12 @@ $(document).ready(function() {
 		contentType: false,
 		type: 'GET',
 		success: function(result){
-			var obj = parse_xml_document(result);
-			if(obj && obj.rows && obj.rows.length > 0 && obj.rows[0].query_history_id) {
+			var obj = parse_graha_xml_document(result);
+			if(obj && obj.rows && obj.rows["query_history"] && obj.rows["query_history"].length > 0 && obj.rows["query_history"][0].query_history_id) {
 				MessageArea.confirm(
 					"자동저장된 게시물을 확인하시겠습니까?", 
 					function() {
-						location.href = "insert." + ext + "?query_history_id=" + obj.rows[0].query_history_id;
+						location.href = "insert." + ext + "?query_history_id=" + obj.rows["query_history"][0].query_history_id;
 					},
 					function() {
 						if(isEncrypted) {
