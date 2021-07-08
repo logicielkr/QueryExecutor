@@ -30,7 +30,8 @@ import java.sql.Connection;
 import java.sql.SQLSyntaxErrorException;
 import kr.graha.lib.Processor;
 import kr.graha.lib.Record;
-import kr.graha.lib.LogHelper;
+import kr.graha.helper.LOG;
+import kr.graha.helper.DB;
 import kr.graha.lib.Buffer;
 import java.util.logging.Logger;
 
@@ -92,32 +93,18 @@ public class QueryExecutorProcessorImpl implements Processor {
 					index++;
 				}
 				params.put("result.record_count", index - 1);
-				rs.close();
-				rs = null;
+				DB.close(rs);
 			} else {
 				params.put("result.update_count", pstmt.getUpdateCount());
 			}
-			pstmt.close();
-			pstmt = null;
+			DB.close(pstmt);
 		} catch (SQLException e) {
 			params.put("result.error_message", e.getMessage());
 			params.put("result.error_code", e.getErrorCode());
 			params.put("result.sql_state", e.getSQLState());
 		} finally {
-			if(rs != null) {
-				try {
-					rs.close();
-					rs = null;
-				} catch(SQLException e) {}
-			}
-			if(pstmt != null) {
-				try {
-					pstmt.close();
-					pstmt = null;
-				} catch(SQLException e) {}
-			}
+			DB.close(rs);
+			DB.close(pstmt);
 		}
-		
-
 	}
 }
