@@ -42,7 +42,7 @@ isEncrypted = true;
 						, case when encrypted = true then title else '' end as encrypted_title
 						, to_char(update_date, 'YYYY-MM-DD HH24:MI:SS') as update_date
 						, encrypted
-					from query
+					from query.query
 					where insert_id = ?
 					and parent_id is null
 <tile cond="${param.search} isNotEmpty">
@@ -51,7 +51,7 @@ isEncrypted = true;
 					order by query_id desc
 				</sql>
 				<sql_cnt>
-					select count(*) from query where insert_id = ? and parent_id is null
+					select count(*) from query.query where insert_id = ? and parent_id is null
 <tile cond="${param.search} isNotEmpty">
 					and (title like '%' || ? || '%' or contents like '%' || ? || '%')
 </tile>
@@ -153,7 +153,7 @@ queryHistoryId = <xsl:value-of select="/document/params[@for='data']/query_histo
 		<processors>
 			<processor type="query" after="true" method="POST" cond="${param.query_history_id} isNotEmpty">
 				<sql>
-					delete from query_history where query_history_id = ? and insert_id = ?
+					delete from query.query_history where query_history_id = ? and insert_id = ?
 				</sql>
 				<params>
 					<param name="query_history_id" datatype="int" value="param.query_history_id" default="-1" />
@@ -162,7 +162,7 @@ queryHistoryId = <xsl:value-of select="/document/params[@for='data']/query_histo
 			</processor>
 			<processor type="query" before="true" method="POST" cond="${prop.savehistory} equals 'yy'">
 				<sql>
-					insert into query_history (
+					insert into query.query_history (
 						query_history_id,
 						title,
 						contents,
@@ -192,12 +192,12 @@ queryHistoryId = <xsl:value-of select="/document/params[@for='data']/query_histo
 						update_date,
 						update_id,
 						update_ip
-					from query where query_id = ?
+					from query.query where query_id = ?
 					and (md5(trim(title)) != md5(trim(?)) or md5(trim(contents)) != md5(trim(?)))
 					and insert_id = ?
 				</sql>
 				<params>
-					<param name="query_history_id" datatype="int" value="sequence.nextval('query_history$query_history_id')" default="-1" />
+					<param name="query_history_id" datatype="int" value="sequence.nextval('query.query_history$query_history_id')" default="-1" />
 					<param name="query_id" datatype="int" value="param.query_id" default="-1" />
 					<param name="title" datatype="varchar" value="param.title" />
 					<param name="contents" datatype="varchar" value="param.contents" />
@@ -206,9 +206,9 @@ queryHistoryId = <xsl:value-of select="/document/params[@for='data']/query_histo
 			</processor>
 			<processor type="query" before="true" method="GET" cond="${param.query_id} isNotEmpty">
 				<sql>
-					delete from query_history where query_id = ? and insert_id = ?
+					delete from query.query_history where query_id = ? and insert_id = ?
 					and exists (
-						select * from query where query.query_id = ? and query.insert_id = ?
+						select * from query.query where query.query_id = ? and query.insert_id = ?
 						and md5(query.title) = md5(query_history.title)
 						and md5(query.contents) = md5(query_history.contents)
 					)
@@ -225,8 +225,8 @@ queryHistoryId = <xsl:value-of select="/document/params[@for='data']/query_histo
 			<param name="title" not-null="true" msg="제목은 필수 항목입니다!" />
 		</validation>
 		<tables>
-			<table tableName="query" name="query" label="Query 실행기">
-				<column name="query_id" value="param.query_id" datatype="int" primary="true" insert="sequence.nextval('query$query_id')" />
+			<table tableName="query.query" name="query" label="Query 실행기">
+				<column name="query_id" value="param.query_id" datatype="int" primary="true" insert="sequence.nextval('query.query$query_id')" />
 				<column name="title" value="param.title" datatype="varchar" />
 				<column name="contents" value="param.contents" datatype="varchar" />
 				<column name="results" value="param.results" datatype="varchar" />
@@ -317,8 +317,8 @@ queryHistoryId = <xsl:value-of select="/document/params[@for='data']/query_histo
 		<header>
 		</header>
 		<tables>
-			<table tableName="query_history" name="query_history" label="Query 실행기 이력관리">
-				<column name="query_history_id" value="param.query_history_id" datatype="int" primary="true" insert="sequence.nextval('query_history$query_history_id')" />
+			<table tableName="query.query_history" name="query_history" label="Query 실행기 이력관리">
+				<column name="query_history_id" value="param.query_history_id" datatype="int" primary="true" insert="sequence.nextval('query.query_history$query_history_id')" />
 				<column name="title" value="param.title" datatype="varchar" />
 				<column name="contents" value="param.contents" datatype="varchar" />
 				<column name="encrypted" value="param.encrypted" datatype="boolean" />
@@ -445,7 +445,7 @@ isHistoryEncrypted = true;
 						, to_char(insert_date, 'YYYY-MM-DD HH24:MI:SS') as insert_date
 						, encrypted
 						, parent_id
-					from query
+					from query.query
 						where query_id = ? and insert_id = ?
 				</sql>
 				<params>
@@ -463,7 +463,7 @@ isHistoryEncrypted = true;
 						, results
 						, to_char(update_date, 'YYYY-MM-DD HH24:MI:SS') as update_date
 						, encrypted
-					from query_history
+					from query.query_history
 						where query_id = ? and insert_id = ?
 						and autosave = false
 						order by query_history_id desc
@@ -482,7 +482,7 @@ isHistoryEncrypted = true;
 						, to_char(update_date, 'YYYY-MM-DD HH24:MI:SS') as update_date
 						, encrypted
 						, parent_id
-					from query
+					from query.query
 						where parent_id = ?
 							and insert_id = ?
 						order by query_id desc
@@ -601,7 +601,7 @@ isHistoryEncrypted = true;
 						, results
 </tile>
 						, encrypted
-					from query_history
+					from query.query_history
 					where autosave = true
 						and insert_id = ?
 <tile cond="${param.query_id} isEmpty">
@@ -634,7 +634,7 @@ isHistoryEncrypted = true;
 	</query>
 	<query id="delete" funcType="delete" label="Query 삭제">
 		<tables>
-			<table tableName="query" name="query">
+			<table tableName="query.query" name="query">
 				<column name="query_id" primary="true" value="param.query_id" datatype="int" />
 				<where>
 					<sql>
@@ -645,7 +645,7 @@ isHistoryEncrypted = true;
 					</params>
 				</where>
 			</table>
-			<table tableName="query" name="query_child">
+			<table tableName="query.query" name="query_child">
 				<column name="parent_id" foreign="true" value="param.query_id" datatype="int" />
 				<where>
 					<sql>
@@ -656,7 +656,7 @@ isHistoryEncrypted = true;
 					</params>
 				</where>
 			</table>
-			<table tableName="query_history" name="query_history">
+			<table tableName="query.query_history" name="query_history">
 				<column name="query_id" foreign="true" value="param.query_id" datatype="int" />
 				<where>
 					<sql>
@@ -667,7 +667,7 @@ isHistoryEncrypted = true;
 					</params>
 				</where>
 			</table>
-			<table tableName="query_history" name="query_child_history">
+			<table tableName="query.query_history" name="query_child_history">
 				<column name="parent_id" foreign="true" value="param.query_id" datatype="int" />
 				<where>
 					<sql>
@@ -686,7 +686,7 @@ isHistoryEncrypted = true;
 	</query>
 	<query id="deleteAutoSave" funcType="delete" label="자동저장 삭제">
 		<tables>
-			<table tableName="query_history" name="query_history">
+			<table tableName="query.query_history" name="query_history">
 				<column name="query_history_id" foreign="true" value="param.query_history_id" datatype="int" />
 				<where>
 					<sql>
