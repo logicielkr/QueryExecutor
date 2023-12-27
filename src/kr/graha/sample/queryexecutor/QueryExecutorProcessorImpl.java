@@ -28,11 +28,11 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.SQLSyntaxErrorException;
-import kr.graha.lib.Processor;
-import kr.graha.lib.Record;
+import kr.graha.post.interfaces.Processor;
+import kr.graha.post.lib.Record;
 import kr.graha.helper.LOG;
 import kr.graha.helper.DB;
-import kr.graha.lib.Buffer;
+import kr.graha.post.lib.Buffer;
 import java.util.logging.Logger;
 
 /**
@@ -41,7 +41,7 @@ import java.util.logging.Logger;
 
  * @author HeonJik, KIM
  
- * @see kr.graha.lib.Processor
+ * @see kr.graha.post.interfaces.Processor
  
  * @version 0.9
  * @since 0.9
@@ -65,15 +65,15 @@ public class QueryExecutorProcessorImpl implements Processor {
  * @see jakarta.servlet.http.HttpServletRequest (Apache Tomcat 10 이상)
  * @see javax.servlet.http.HttpServletResponse (Apache Tomcat 10 미만)
  * @see jakarta.servlet.http.HttpServletResponse (Apache Tomcat 10 이상)
- * @see kr.graha.lib.Record 
+ * @see kr.graha.post.lib.Record 
  * @see java.sql.Connection 
  */
 	public void execute(HttpServletRequest request, HttpServletResponse response, Record params, Connection con) {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String sql = params.getString("param.contents");
+		String sql = params.getString(Record.key(Record.PREFIX_TYPE_PARAM, "contents"));
 		if(sql == null || sql.trim().equals("")) {
-			params.put("result.err", "sql is null or empty");
+			params.put(Record.key(Record.PREFIX_TYPE_RESULT, "err"), "sql is null or empty");
 		}
 		Buffer buffer = new Buffer();
 		try {
@@ -83,25 +83,25 @@ public class QueryExecutorProcessorImpl implements Processor {
 				ResultSetMetaData rsmd = rs.getMetaData();
 				int index = 1;
 				while(rs.next()) {
-					params.put("result.column_count", rsmd.getColumnCount());
+					params.put(Record.key(Record.PREFIX_TYPE_RESULT, "column_count"), rsmd.getColumnCount());
 					for(int x = 1; x <= rsmd.getColumnCount(); x++) {
 						if(index == 1) {
-							params.put("result.column_name_" + x, rsmd.getColumnName(x));
+							params.put(Record.key(Record.PREFIX_TYPE_RESULT, "column_name_" + x), rsmd.getColumnName(x));
 						}
-						params.put("result.column_data_" + index + "_" + x, rs.getString(x));
+						params.put(Record.key(Record.PREFIX_TYPE_RESULT, "column_data_" + index + "_" + x), rs.getString(x));
 					}
 					index++;
 				}
-				params.put("result.record_count", index - 1);
+				params.put(Record.key(Record.PREFIX_TYPE_RESULT, "record_count"), index - 1);
 				DB.close(rs);
 			} else {
-				params.put("result.update_count", pstmt.getUpdateCount());
+				params.put(Record.key(Record.PREFIX_TYPE_RESULT, "update_count"), pstmt.getUpdateCount());
 			}
 			DB.close(pstmt);
 		} catch (SQLException e) {
-			params.put("result.error_message", e.getMessage());
-			params.put("result.error_code", e.getErrorCode());
-			params.put("result.sql_state", e.getSQLState());
+			params.put(Record.key(Record.PREFIX_TYPE_RESULT, "error_message"), e.getMessage());
+			params.put(Record.key(Record.PREFIX_TYPE_RESULT, "error_code"), e.getErrorCode());
+			params.put(Record.key(Record.PREFIX_TYPE_RESULT, "sql_state"), e.getSQLState());
 		} finally {
 			DB.close(rs);
 			DB.close(pstmt);
