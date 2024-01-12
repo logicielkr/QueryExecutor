@@ -1,4 +1,4 @@
-<project name="QueryExecutor" default="package-tar">
+<project name="build.QueryExecutor">
 	<property name = "base.dir" value = "." />
 	<property name = "src.dir" value = "${base.dir}/src" />
 	<property name = "build.dir" value = "${base.dir}/bin" />
