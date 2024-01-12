@@ -1,0 +1,7 @@
+<project name="QueryExecutor" default="package-tar">
+	<import file="./build.query.xml" as="query" />
+</project>
+
+
+
+
