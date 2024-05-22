@@ -239,7 +239,8 @@ function readyAutoSave(gbn) {
 		if(gbn) {
 			autoSave(true);
 		}
-		$("table#query td.contents textarea.contents").keypress(function () {
+		$("table#query td.contents textarea.contents").keypress(function (e) {
+			ctrlenter(e);
 			callAutoSave();
 		});
 		$("table#query td.title input.title").keypress(function () {
@@ -249,6 +250,9 @@ function readyAutoSave(gbn) {
 		autoSave(false);
 		$("table#query td.title input.title").off("keypress");
 		$("table#query td.contents textarea.contents").off("keypress");
+		$("textarea\.contents").keypress(function(e) {
+			ctrlenter(e);
+		});
 	}
 }
 function callAutoSave() {
