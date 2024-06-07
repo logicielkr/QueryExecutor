@@ -244,7 +244,7 @@ function readyAutoSave(gbn) {
 			autoSave(true);
 		}
 		$("table#query td.contents textarea.contents").keypress(function (e) {
-			ctrlenter(e);
+//			ctrlenter(e);
 			callAutoSave();
 		});
 		$("table#query td.title input.title").keypress(function () {
