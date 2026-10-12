@@ -44,7 +44,9 @@ function evalcode2() {
 						$("table.results").append("<tr class='data" + x + "'></tr>");
 						for(var i = 1; i <= obj.results.column_count; i++) {
 							$("table.results tr.data" + x + "").append("<td class='c_" + i + "'></td>");
-							$("table.results tr.data" + x + " td.c_" + i + "").append(document.createTextNode(obj.results["column_data_" + x + "_" + i]));
+							if(obj.results["column_data_" + x + "_" + i] && obj.results["column_data_" + x + "_" + i] != null) {
+								$("table.results tr.data" + x + " td.c_" + i + "").append(document.createTextNode(obj.results["column_data_" + x + "_" + i]));
+							}
 						}
 					}
 				} else {
@@ -76,7 +78,7 @@ function saveAsNew() {
 $(document).ready(function() {
 	if($("form#insert input[name='query_id']").val() != "") {
 //		$("<button type='button' onclick='saveAsNew()'>새이름으로</button>").insertAfter($("button#insert_submit"));
-		$("div.nav.top div.box.center").append($("<button type='button' onclick='saveAsNew()'>새이름으로</button>"));
+		$("div.nav.top div.box.center").append($("<button class='graha' type='button' onclick='saveAsNew()'>새이름으로</button>"));
 	}
 	$("textarea\.contents").keypress(function(e) {
 			ctrlenter(e);

@@ -3,7 +3,21 @@ table#query th.update_date {
 	width:200px;
 	text-align:center;
 }
-
+table#query {
+	table-layout: fixed;
+}
+table#query th.project_name, 
+table#query td.project_name,
+table#query th.category, 
+table#query td.category {
+	width:150px;
+}
+table#query td.project_name,
+table#query td.category {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
 table#query th.encrypted_title,
 table#query td.encrypted_title,
 table#query th.encrypted,
@@ -11,12 +25,18 @@ table#query td.encrypted {
 	display:none;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 900px) {
 	table#query th.update_date,
-	table#query td.update_date
+	table#query td.update_date,
+	table#query th.project_name, 
+	table#query td.project_name,
+	table#query th.category, 
+	table#query td.category
 	{
 		display:none;
 	}
+}
+@media only screen and (max-width: 600px) {
 	div.nav.bottom {
 		font-size:18px;
 		display: grid;
